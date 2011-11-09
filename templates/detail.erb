@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title><%= @gpx_filename %> | The running log</title>
+  </head>
+  <body>
+  <h1><%= @gpx_filename %></h1>
+  <p>Date: <%= @parsed_gpx.tracks.first.points.first.time %></p>
+  <p>Distance: <%= @parsed_gpx.distance({:units => 'meters' }).to_i %> m</p>
+  <p>Duration: <%= (@parsed_gpx.duration / 60).to_i %> min</p>
+  <p>Avg Speed: <%= @parsed_gpx.average_speed({:units => 'kilometers'}).round(2) %> min</p>
+  </body>
+</html>

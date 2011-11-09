@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>Index | The running log</title>
+  </head>
+  <body>
+  <table class='rounded-corner'>
+    <thead>
+      <th>Average duration</th><th>Average speed</th><th>Average distance</th>
+    </thead>
+  <tr>
+    <td><%= @average_duration %> min</td>
+    <td><%= @average_speed %> km/h</td>
+    <td><%= @average_distance %> m</td>
+  </tr>
+  <tfoot></tfoot>
+  </table>
+  <table class='rounded-corner'>
+    <thead>
+      <th>Filename</th><th>Date</th><th>Distance</th><th>Duration</th><th>Speed</th>
+    </thead>
+    <tbody>
+    <% @gpx_data.each do |gpx_file| %>
+    <tr>
+      <td><a href="details/<%=gpx_file[:file_name]%>.html"><%=gpx_file[:file_name]%></a></td>
+      <td><%=gpx_file[:date]%></td>
+      <td><%=gpx_file[:distance]%> m</td>
+      <td><%=gpx_file[:duration]%> min</td>
+      <td><%=gpx_file[:speed_avg]%> km/h</td>
+    </tr>
+    <% end %>
+    </tbody>
+    <tfoot></tfoot>
+    </table>
+  </body>
+</html>

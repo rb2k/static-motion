@@ -1,0 +1,5 @@
+How to install:  
+Just use bundler and do "bundle install"
+
+How to run:  
+ruby main.rb /Users/johndoe/gpx/ /Users/johndoe/running_html
