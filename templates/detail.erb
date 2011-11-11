@@ -2,6 +2,10 @@
   <head>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <title><%= @gpx_filename %> | The running log</title>
+    <style type="text/css">
+      body {text-align: center;}
+      #mapcontent {display:inline-block; vertical-align:middle; width: 800px; height: 600px; margin: 10; padding: 10;}
+    </style>
   </head>
   <body>
   <h1><%= @gpx_filename %></h1>
@@ -9,5 +13,42 @@
   <p>Distance: <%= @parsed_gpx.distance({:units => 'meters' }).to_i %> m</p>
   <p>Duration: <%= (@parsed_gpx.duration / 60).to_i %> min</p>
   <p>Avg Speed: <%= @parsed_gpx.average_speed({:units => 'kilometers'}).round(2) %> min</p>
+  
+
+  <div id="mapcontent"><div id="map"></div></div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+  <script>
+    map = new OpenLayers.Map("map", {
+        controls:[
+          new OpenLayers.Control.Navigation(),
+          new OpenLayers.Control.PanZoomBar(),
+          new OpenLayers.Control.LayerSwitcher(),
+          new OpenLayers.Control.Attribution()],
+        maxExtent: new OpenLayers.Bounds(<%= @parsed_gpx.bounds.min_lon %>, <%= @parsed_gpx.bounds.max_lon %>,<%= @parsed_gpx.bounds.min_lat %>, <%= @parsed_gpx.bounds.max_lon %>),
+        maxResolution: 156543.0399,
+        numZoomLevels: 13,
+        units: 'm',
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        displayProjection: new OpenLayers.Projection("EPSG:4326")
+      } );
+    map.addLayer(new OpenLayers.Layer.OSM());
+
+    // Add the Layer with the GPX Track
+    var gpxtrack = new OpenLayers.Layer.GML("Run", "<%= @gpx_filename %>", {
+        format: OpenLayers.Format.GPX,
+        style: {strokeColor: "green", strokeWidth: 5, strokeOpacity: 0.5},
+        projection: new OpenLayers.Projection("EPSG:4326")
+    });
+    map.addLayer(gpxtrack);
+    map.zoomToMaxExtent();
+    map.setCenter(new OpenLayers.LonLat(<%= ((@parsed_gpx.bounds.min_lon + @parsed_gpx.bounds.max_lon) / 2.0).round(2) %>,<%= ((@parsed_gpx.bounds.min_lat + @parsed_gpx.bounds.max_lat) / 2.0).round(2) %>).transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
+          ), 15 // Zoom level
+        );
+
+  </script>
+
   </body>
 </html>

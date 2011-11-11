@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'bundler/setup'
 require 'erb'
 require 'fileutils'
@@ -21,6 +22,7 @@ FileUtils.mkpath "#{output_folder}/details/"
 #Delete old detail files
 puts "Cleaning the details folder"
 Dir["#{output_folder}/details/*.html"].each {|detail_file| File.delete(detail_file)}
+Dir["#{output_folder}/details/*.gpx"].each {|detail_file| File.delete(detail_file)}
 #Copy over static files
 static_files = Dir.glob('static_files/*')
 FileUtils.cp_r static_files, output_folder
@@ -35,6 +37,7 @@ gpx_files.each_with_index do |gpx_file, index|
     raise "No duration found" if @parsed_gpx.duration.to_i == 0
 
     @gpx_filename = File.basename(gpx_file)
+    FileUtils.cp_r gpx_file, "#{output_folder}/details/"
     File.open("#{output_folder}/details/#{File.basename(gpx_file)}.html", 'w') {|f| f.write(detail_template.result) }
 
     @gpx_data << {
