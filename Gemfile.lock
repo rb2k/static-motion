@@ -1,13 +1,13 @@
 GIT
   remote: git://github.com/rb2k/gpx.git
-  revision: 0d5e31fe96ddc5241b4efb30557f2115baaef147
+  revision: 56e0a77869f656f52a579608f6fcc7b1222eb86c
   specs:
     gpx (0.7)
-      hpricot
+      nokogiri
 
 GEM
   specs:
-    hpricot (0.8.4)
+    nokogiri (1.5.0)
 
 PLATFORMS
   ruby
